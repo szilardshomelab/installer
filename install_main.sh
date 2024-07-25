@@ -19,6 +19,6 @@ git clone https://github.com/szilardshomelab/installer.git "$TARGET_DIR" &> /dev
 
 
 clear
-/opt/szilardshomelab/menu.sh
+/opt/szilardshomelab/menu/menu.sh
 # End logging
 echo "$(date): Script finished." >> "$LOG_FILE"
