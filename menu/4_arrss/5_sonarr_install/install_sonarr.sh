@@ -20,8 +20,11 @@ else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
+ENV_FILE="/opt/szilardshomelab/.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/sonarr/compose-template.yml"
-OUTPUT_FILE="/opt/szilardshomelab/appdata/sonarr/compose.yml"
+mkdir -p /opt/appdata/sonarr
+touch /opt/appdata/sonarr/compose.yml
+OUTPUT_FILE="/opt/appdata/sonarr/compose.yml"
 
 # Load environment variables from the .env file
 export $(grep -v '^#' $ENV_FILE | xargs)

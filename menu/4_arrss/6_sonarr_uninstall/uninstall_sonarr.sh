@@ -2,7 +2,7 @@
 
 # Define the container name and volumes
 CONTAINER_NAME="sonarr"
-VOLUME_PATH="/opt/szilardshomelab/appdata/sonarr/config"
+VOLUME_PATH="/opt/appdata/sonarr/config"
 
 # Stop and remove the sonarr container
 echo "Stopping and removing the sonarr container..."

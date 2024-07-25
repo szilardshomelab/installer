@@ -9,7 +9,7 @@ services:
       - WEBUI_PORT=8080
       - TORRENTING_PORT=51234
     volumes:
-      - /opt/szilardshomelab/appdata/qbittorrent/config:/config
+      - /opt/appdata/qbittorrent/config:/config
       - /${SMB}/torrents:/data/torrents
       - /var/run/docker.sock:/var/run/docker.sock:ro
     ports:

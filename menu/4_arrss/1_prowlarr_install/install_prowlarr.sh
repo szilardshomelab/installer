@@ -20,8 +20,11 @@ else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
+ENV_FILE="/opt/szilardshomelab/.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/prowlarr/compose-template.yml"
-OUTPUT_FILE="/opt/szilardshomelab/appdata/prowlarr/compose.yml"
+mkdir -p /opt/appdata/prowlarr
+touch /opt/appdata/prowlarr/compose.yml
+OUTPUT_FILE="/opt/appdata/prowlarr/compose.yml"
 
 # Load environment variables from the .env file
 export $(grep -v '^#' $ENV_FILE | xargs)
@@ -44,7 +47,7 @@ echo "prowlarr service started successfully"
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming Portainer is exposed on port 9696
+# Assuming prowlarr is exposed on port 9696
 prowlarr_PORT=9696
 
 # Construct the access URL

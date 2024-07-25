@@ -7,7 +7,7 @@ services:
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
     volumes:
-      - /opt/szilardshomelab/appdata/prowlarr/config:/config
+      - /opt/appdata/prowlarr/config:/config
     ports:
       - 9696:9696
     networks:

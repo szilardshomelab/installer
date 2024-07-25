@@ -2,7 +2,7 @@
 
 # Define the container name and volumes
 CONTAINER_NAME="prowlarr"
-VOLUME_PATH="/opt/szilardshomelab/appdata/prowlarr/config"
+VOLUME_PATH="/opt/appdata/prowlarr/config"
 
 # Stop and remove the prowlarr container
 echo "Stopping and removing the prowlarr container..."

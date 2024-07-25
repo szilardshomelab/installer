@@ -2,7 +2,7 @@
 
 # Define the container name and volumes
 CONTAINER_NAME="radarr"
-VOLUME_PATH="/opt/szilardshomelab/appdata/radarr/config"
+VOLUME_PATH="/opt/appdata/radarr/config"
 
 # Stop and remove the radarr container
 echo "Stopping and removing the radarr container..."

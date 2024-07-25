@@ -2,7 +2,7 @@
 
 # Define the container name and volumes
 CONTAINER_NAME="portainer"
-VOLUME_PATH="/opt/szilardshomelab/appdata/portainer/portainer"
+VOLUME_PATH="/opt/appdata/portainer/config"
 
 # Stop and remove the Portainer container
 echo "Stopping and removing the Portainer container..."

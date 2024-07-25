@@ -2,7 +2,7 @@
 
 # Define the container name and volumes
 CONTAINER_NAME="qbittorrent"
-VOLUME_PATH="/opt/szilardshomelab/appdata/qbittorrent/config"
+VOLUME_PATH="/opt/appdata/qbittorrent/config"
 
 # Stop and remove the qBittorrent container
 echo "Stopping and removing the qBittorrent container..."

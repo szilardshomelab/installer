@@ -23,7 +23,10 @@ else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
+ENV_FILE="/opt/szilardshomelab/.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
+mkdir -p /opt/appdata/qbittorrent
+touch /opt/appdata/qbittorrent/compose.yml
 OUTPUT_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose.yml"
 
 # Load environment variables from the .env file
@@ -52,7 +55,7 @@ echo "Stopping the qBittorrent container..."
 sudo docker compose -f $OUTPUT_FILE down
 
 # Check if the configuration file exists
-CONFIG_FILE="/opt/szilardshomelab/appdata/qbittorrent/config/qBittorrent/qBittorrent.conf"
+CONFIG_FILE="/opt/appdata/qbittorrent/config/qBittorrent/qBittorrent.conf"
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Error: Configuration file not found at $CONFIG_FILE."
@@ -103,7 +106,7 @@ fi
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming Portainer is exposed on port 8080
+# Assuming qbittorrent is exposed on port 8080
 QBITTORRENT_PORT=8080
 
 # Construct the access URL
