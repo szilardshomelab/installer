@@ -1,0 +1,20 @@
+services:
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /opt/appdata/prowlarr/config:/config
+    ports:
+      - 8989:8989
+    networks:
+      - ${DOCKER_NETWORK_NAME}
+    restart: unless-stopped
+
+networks:
+  ${DOCKER_NETWORK_NAME}:
+    driver: bridge
+    external: true

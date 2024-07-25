@@ -1,0 +1,23 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/appdata/portainer/config:/data
+    ports:
+      - 9443:9443
+    networks:
+      - ${DOCKER_NETWORK_NAME}
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+
+networks:
+  ${DOCKER_NETWORK_NAME}:
+    external: true
