@@ -8,7 +8,7 @@ log_message() {
     local message="$1"
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $message" | tee -a "$LOG_FILE"
 }
-
+sudo apt-get install cifs-utils -y
 # Prompt user for input
 read -p "Enter the SMB server IP/Name (e.g., 192.168.1.10 or server_name): " SERVER
 read -p "Enter the SMB share name (e.g., share_name): " SHARE_NAME
