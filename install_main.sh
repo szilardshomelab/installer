@@ -17,8 +17,6 @@ echo "Cloning in progress..."
 echo "$(date): Cloning in progress..." >> "$LOG_FILE"
 git clone https://github.com/szilardshomelab/installer.git "$TARGET_DIR" &> /dev/null
 
-
-clear
 /opt/szilardshomelab/menu/menu.sh
 # End logging
 echo "$(date): Script finished." >> "$LOG_FILE"
