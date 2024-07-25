@@ -20,9 +20,13 @@ echo "$(date): Updating in progress..." >> "$LOG_FILE"
 if [ -d "$TARGET_DIR" ]; then
     # Navigate to the repository directory
     cd "$TARGET_DIR"
+    
     # Pull the latest changes and capture output
+    echo "$(date): Running git pull..." >> "$LOG_FILE"
     PULL_OUTPUT=$(git pull origin main 2>&1)
     PULL_EXIT_CODE=$?
+
+    echo "$(date): git pull output: $PULL_OUTPUT" >> "$LOG_FILE"
 
     if [ $PULL_EXIT_CODE -eq 0 ]; then
         if [[ $PULL_OUTPUT == *"Already up to date."* ]]; then
@@ -43,7 +47,6 @@ if [ -d "$TARGET_DIR" ]; then
     else
         echo "Update failed."
         echo "$(date): Update failed." >> "$LOG_FILE"
-        echo "$(date): $PULL_OUTPUT" >> "$LOG_FILE"
         exit 1
     fi
 else
