@@ -5,7 +5,7 @@ echo "Welcome to SZILARDSHOMELAB!"
 echo "Starting the update script..."
 
 # Log file
-LOG_FILE="/opt/logs/update.log"
+LOG_FILE="/opt/update.log"
 
 # Target directory
 TARGET_DIR="/opt/szilardshomelab"
@@ -29,14 +29,29 @@ if [ -d "$TARGET_DIR" ]; then
     else
         echo "Update failed."
         echo "$(date): Update failed." >> "$LOG_FILE"
+        exit 1
     fi
+
+    # Find all .sh files and make them executable
+    echo "$(date): Making all .sh files in $TARGET_DIR executable." >> "$LOG_FILE"
+    find "$TARGET_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+    if [ $? -ne 0 ]; then
+        echo "$(date): Failed to make some .sh files executable." >> "$LOG_FILE"
+        exit 1
+    fi
+
 else
     echo "Target directory does not exist. Please clone the repository first."
     echo "$(date): Target directory does not exist. Please clone the repository first." >> "$LOG_FILE"
+    exit 1
 fi
 
 clear
-/opt/szilardshomelab/menu/menu.sh
+"$TARGET_DIR/menu/menu.sh"
+if [ $? -ne 0 ]; then
+    echo "$(date): menu.sh execution failed." >> "$LOG_FILE"
+    exit 1
+fi
 
 # End logging
 echo "$(date): Update script finished." >> "$LOG_FILE"
