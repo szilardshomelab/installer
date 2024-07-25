@@ -27,7 +27,7 @@ ENV_FILE="/opt/szilardshomelab/.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
 mkdir -p /opt/appdata/qbittorrent
 touch /opt/appdata/qbittorrent/compose.yml
-OUTPUT_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose.yml"
+OUTPUT_FILE="/opt/appdata/qbittorrent/compose.yml"
 
 # Load environment variables from the .env file
 export $(grep -v '^#' $ENV_FILE | xargs)
