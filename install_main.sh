@@ -5,7 +5,7 @@ echo "Welcome to SZILARDSHOMELAB!"
 echo "Starting the script..."
 
 # Log file
-LOG_FILE="/opt/clone.log"
+LOG_FILE="/opt/szilardshomelab_clone.log"
 
 # Target directory
 TARGET_DIR="/opt/szilardshomelab"
@@ -13,52 +13,39 @@ TARGET_DIR="/opt/szilardshomelab"
 # Start logging
 echo "$(date): Script started." >> "$LOG_FILE"
 echo "$(date): Welcome to SZILARDSHOMELAB!" >> "$LOG_FILE"
-echo "Cloning in progress..."
-echo "$(date): Cloning in progress..." >> "$LOG_FILE"
 
-# Ensure the target directory exists or create it
-if [ ! -d "$TARGET_DIR" ]; then
-  echo "$(date): Creating target directory $TARGET_DIR." >> "$LOG_FILE"
-  mkdir -p "$TARGET_DIR"
-  if [ $? -ne 0 ]; then
-    echo "$(date): Failed to create target directory $TARGET_DIR." >> "$LOG_FILE"
-    exit 1
-  fi
+# Check if the target directory exists
+if [ -d "$TARGET_DIR/.git" ]; then
+  echo "The target directory already exists and is a git repository. Stashing local changes..."
+  echo "$(date): The target directory already exists and is a git repository. Stashing local changes..." >> "$LOG_FILE"
+  cd "$TARGET_DIR"
+  git stash 
+  git pull 
+  git stash pop 
+else
+  # Clone the Git repo
+  echo "Cloning in progress..."
+  echo "$(date): Cloning in progress..." >> "$LOG_FILE"
+  git clone https://github.com/szilardshomelab/installer.git "$TARGET_DIR" &> /dev/null
 fi
 
-# Perform git clone and check for errors
-git clone https://github.com/szilardshomelab/installer.git "$TARGET_DIR" &>> "$LOG_FILE"
-if [ $? -ne 0 ]; then
-  echo "$(date): Git clone failed." >> "$LOG_FILE"
-  exit 1
-fi
+# Check if the cloning or pulling was successful
+if [ $? -eq 0 ]; then
+  echo "Repository is up to date."
+  echo "$(date): Repository is up to date." >> "$LOG_FILE"
 
-# Find all .sh files and make them executable
-echo "$(date): Making all .sh files in $TARGET_DIR executable." >> "$LOG_FILE"
-find "$TARGET_DIR" -type f -name "*.sh" -exec chmod +x {} \;
-if [ $? -ne 0 ]; then
-  echo "$(date): Failed to make some .sh files executable." >> "$LOG_FILE"
-  exit 1
-fi
+  # Set execution permissions for all .sh files in the target directory
+  echo "Setting execution permissions for all .sh files..."
+  echo "$(date): Setting execution permissions for all .sh files..." >> "$LOG_FILE"
+  find "$TARGET_DIR" -type f -name "*.sh" -exec chmod +x {} \; &> /dev/null
 
-# Check if menu.sh exists and is executable
-MENU_SCRIPT="$TARGET_DIR/menu/menu.sh"
-if [ ! -f "$MENU_SCRIPT" ]; then
-  echo "$(date): $MENU_SCRIPT not found." >> "$LOG_FILE"
-  exit 1
+  echo "Execution permissions set successfully."
+  echo "$(date): Execution permissions set successfully." >> "$LOG_FILE"
+else
+  echo "An error occurred during cloning or pulling."
+  echo "$(date): An error occurred during cloning or pulling." >> "$LOG_FILE"
 fi
-
-if [ ! -x "$MENU_SCRIPT" ]; then
-  echo "$(date): $MENU_SCRIPT is not executable." >> "$LOG_FILE"
-  exit 1
-fi
-
-# Run the menu script
-"$MENU_SCRIPT"
-if [ $? -ne 0 ]; then
-  echo "$(date): $MENU_SCRIPT execution failed." >> "$LOG_FILE"
-  exit 1
-fi
-
+clear
+/opt/szilardshomelab/menu.sh
 # End logging
 echo "$(date): Script finished." >> "$LOG_FILE"
