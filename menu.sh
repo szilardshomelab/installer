@@ -11,7 +11,7 @@ function show_menu() {
 
 function basic_function() {
     echo "Opening Basic Functions Menu..."
-    /opt/szilardshomelab/Menu/1_Basic_Scripts/basic_scripts_menu.sh
+    /opt/szilardshomelab/menu/1_Basic_Scripts/basic_scripts_menu.sh
     if [ $? -eq 1 ]; then
         exit 0
     fi
@@ -19,7 +19,7 @@ function basic_function() {
 
 function docker() {
     echo "Executing Docker setup..."
-    /opt/szilardshomelab/Menu/2_Docker/docker_menu.sh
+    /opt/szilardshomelab/menu/2_Docker/docker_menu.sh
     if [ $? -eq 1 ]; then
         exit 0
     fi
@@ -27,7 +27,7 @@ function docker() {
 
 function media() {
     echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/Menu/3_Media/media_menu.sh
+    /opt/szilardshomelab/menu/3_Media/media_menu.sh
     if [ $? -eq 1 ]; then
         exit 0
     fi
@@ -35,7 +35,7 @@ function media() {
 
 function arrs() {
     echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/Menu/4_ARRs/arrs_menu.sh
+    /opt/szilardshomelab/menu/4_ARRs/arrs_menu.sh
     
     if [ $? -eq 1 ]; then
         exit 0

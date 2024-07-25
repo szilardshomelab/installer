@@ -1,3 +1,3 @@
-sudo wget -qO ./installer.sh https://raw.githubusercontent.com/szilardshomelab/installer/main/installer.sh &&\
-sudo chmod +x installer.sh &&\
-sudo ./installer.sh
+sudo wget -qO ./install_main https://raw.githubusercontent.com/szilardshomelab/test/main/install_main.sh &&\
+sudo chmod +x install_main 
+sudo ./install_main
