@@ -10,22 +10,22 @@ function show_menu() {
     echo -n "Please choose an option [1 - 3]: "
 }
 function install_prowlarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/1_prowlarr_install/install_prowlarr.sh
+    /opt/szilardshomelab/menu/4_arrs/1_prowlarr_install/install_prowlarr.sh
 }
 function uninstall_prowlarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/2_prowlarr_uninstall/uninstall_prowlarr.sh
+    /opt/szilardshomelab/menu/4_arrs/2_prowlarr_uninstall/uninstall_prowlarr.sh
 }
 function install_radarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/3_radarr_install/install_radarr.sh
+    /opt/szilardshomelab/menu/4_arrs/3_radarr_install/install_radarr.sh
 }
 function uninstall_radarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/4_radarr_uninstall/uninstall_radarr.sh
+    /opt/szilardshomelab/menu/4_arrs/4_radarr_uninstall/uninstall_radarr.sh
 }
 function install_sonarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/5_sonarr_install/install_sonarr.sh
+    /opt/szilardshomelab/menu/4_arrs/5_sonarr_install/install_sonarr.sh
 }
 function uninstall_sonarr() {
-    /opt/szilardshomelab/Menu/4_ARRs/6_sonarr_uninstall/uninstall_sonarr.sh
+    /opt/szilardshomelab/menu/4_arrs/6_sonarr_uninstall/uninstall_sonarr.sh
 }
 
 while true; do

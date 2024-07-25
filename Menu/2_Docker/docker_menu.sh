@@ -7,13 +7,13 @@ function show_menu() {
     echo -n "Please choose an option [1 - 5]: "
 }
 function install_docker() {
-    /opt/szilardshomelab/Menu/2_Docker/1_Install_Docker/install_docker.sh
+    /opt/szilardshomelab/menu/2_docker/1_install_docker/install_docker.sh
 }
 function install_portainer() {
-    /opt/szilardshomelab/Menu/2_Docker/2_portainer_install/install_portainer.sh
+    /opt/szilardshomelab/menu/2_docker/2_portainer_install/install_portainer.sh
 }
 function uninstall_portainer() {
-    /opt/szilardshomelab/Menu/2_Docker/3_portainer_uninstall/uninstall_portainer.sh
+    /opt/szilardshomelab/menu/2_docker/3_portainer_uninstall/uninstall_portainer.sh
 }
 
 while true; do
