@@ -47,7 +47,7 @@ fi
 echo "qBittorrent service started successfully"
 
 # Wait for the container to be fully started (increase the sleep duration if needed)
-sleep 15
+sleep 5
 
 # Stop the container
 echo "Stopping the qBittorrent container..."
@@ -86,7 +86,7 @@ fi
 echo "qBittorrent service restarted successfully with updated configuration."
 
 # Wait for the container to be fully started (increase the sleep duration if needed)
-sleep 15
+sleep 5
 
 # Get the container ID or name
 CONTAINER_ID=$(sudo docker ps -q -f "name=qbittorrent") # Adjust filter if necessary
