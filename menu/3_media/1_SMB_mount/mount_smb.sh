@@ -8,15 +8,19 @@ log_message() {
     local message="$1"
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $message" | tee -a "$LOG_FILE"
 }
+
+# Update package list and install required packages
 sudo apt update
 sudo apt-get install cifs-utils -y
-sudo apt install linux-modules-extra-$(uname -r)
+sudo apt install linux-modules-extra-$(uname -r) -y
+
 # Prompt user for input
 read -p "Enter the SMB server IP/Name (e.g., 192.168.1.10 or server_name): " SERVER
 read -p "Enter the SMB share name (e.g., share_name): " SHARE_NAME
 read -p "Enter the local mount point (e.g., /mnt/share): " MOUNT_POINT
 read -p "Enter your SMB username: " USERNAME
-read -p "Enter your SMB password: " PASSWORD
+read -sp "Enter your SMB password: " PASSWORD
+echo
 
 # Construct the share path
 SHARE="//${SERVER}/${SHARE_NAME}"
@@ -62,6 +66,11 @@ log_message "Mounting $SHARE to $MOUNT_POINT"
 # Check if the mount was successful
 if mountpoint -q "$MOUNT_POINT"; then
     log_message "Successfully mounted $SHARE to $MOUNT_POINT"
+
+    # Write MOUNT_POINT to /opt/appdata/.env
+    ENV_FILE="/opt/appdata/.env"
+    log_message "Writing SMB mount point to $ENV_FILE."
+    echo "SMB=$MOUNT_POINT" | sudo tee "$ENV_FILE" >> /dev/null
 else
     log_message "Failed to mount $SHARE to $MOUNT_POINT. Attempting manual mount for debugging."
 
