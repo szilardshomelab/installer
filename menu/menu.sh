@@ -5,7 +5,8 @@ function show_menu() {
     echo "2. Docker"
     echo "3. Media (SMB mount, qBittorrent)"
     echo "4. ARRs"
-    echo "5. Exit"
+    echo "5. Traefik"
+    echo "6. Exit"
     echo -n "Please choose an option [1 - 4]: "
 }
 
@@ -41,6 +42,14 @@ function arrs() {
         exit 0
     fi
 }
+function traefik() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/5_traefik/1_traefik_install/traefik_menu.sh
+    
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
 
 while true; do
     show_menu
@@ -57,8 +66,11 @@ while true; do
             ;;
         4)
             arrs
-            ;;            
+            ;;
         5)
+            traefik
+            ;;                 
+        6)
             echo "Exiting..."
             exit 0
             ;;
