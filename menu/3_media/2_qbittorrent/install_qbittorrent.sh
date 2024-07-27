@@ -10,20 +10,16 @@ while true; do
     esac
 done
 
-# Prompt the user for the SMB path
-read -p "Enter the SMB path: " SMB_PATH
-
 # Update the .env file
 ENV_FILE="/opt/appdata/.env"
-ENV_FILE2="/opt/appdata/.network.env"
 
 # Check if the entry already exists
 if grep -q '^SMB=' "$ENV_FILE"; then
-    sudo sed -i "s|^SMB=.*|SMB=$SMB_PATH|" "$ENV_FILE"
+    sudo sed -i "s/^SMB=.*/SMB=$SMB_PATH/" "$ENV_FILE"
 else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
-
+ENV_FILE2="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
 mkdir -p /opt/appdata/qbittorrent
 touch /opt/appdata/qbittorrent/compose.yml
