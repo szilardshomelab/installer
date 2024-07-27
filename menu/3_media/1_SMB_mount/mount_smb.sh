@@ -67,10 +67,16 @@ log_message "Mounting $SHARE to $MOUNT_POINT"
 if mountpoint -q "$MOUNT_POINT"; then
     log_message "Successfully mounted $SHARE to $MOUNT_POINT"
 
-    # Write MOUNT_POINT to /opt/appdata/.env
+    # Write or update MOUNT_POINT in /opt/appdata/.env
     ENV_FILE="/opt/appdata/.env"
-    log_message "Writing SMB mount point to $ENV_FILE."
-    echo "SMB=$MOUNT_POINT" | sudo tee "$ENV_FILE" > /dev/null
+    log_message "Updating $ENV_FILE with SMB mount point."
+
+    # Update or add the SMB entry
+    if sudo grep -q '^SMB=' "$ENV_FILE"; then
+        sudo sed -i "s|^SMB=.*|SMB=$MOUNT_POINT|" "$ENV_FILE"
+    else
+        echo "SMB=$MOUNT_POINT" | sudo tee -a "$ENV_FILE" > /dev/null
+    fi
 else
     log_message "Failed to mount $SHARE to $MOUNT_POINT. Attempting manual mount for debugging."
 
