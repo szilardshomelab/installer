@@ -44,7 +44,7 @@ function arrs() {
 }
 function traefik() {
     echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/5_traefik/1_traefik_install/traefik_menu.sh
+    /opt/szilardshomelab/menu/5_traefik/traefik_menu.sh
     
     if [ $? -eq 1 ]; then
         exit 0
