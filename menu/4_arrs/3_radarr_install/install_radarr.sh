@@ -11,7 +11,7 @@ while true; do
 done
 
 # Update the .env file
-ENV_FILE="/opt/szilardshomelab/.env"
+ENV_FILE="/opt/appdata/.env"
 
 # Check if the entry already exists
 if grep -q '^SMB=' "$ENV_FILE"; then
@@ -20,7 +20,7 @@ else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
-ENV_FILE2="/opt/szilardshomelab/.network.env"
+ENV_FILE2="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/radarr/compose-template.yml"
 mkdir -p /opt/appdata/radarr
 touch /opt/appdata/radarr/compose.yml
