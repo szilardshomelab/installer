@@ -10,24 +10,14 @@ while true; do
     esac
 done
 
-# Update the .env file
 ENV_FILE="/opt/appdata/.env"
-
-# Check if the entry already exists
-if grep -q '^SMB=' "$ENV_FILE"; then
-    sudo sed -i "s/^SMB=.*/SMB=$SMB_PATH/" "$ENV_FILE"
-else
-    echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
-fi
-
-ENV_FILE2="/opt/appdata/.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/sonarr/compose-template.yml"
 mkdir -p /opt/appdata/sonarr
 touch /opt/appdata/sonarr/compose.yml
 OUTPUT_FILE="/opt/appdata/sonarr/compose.yml"
 
 # Load environment variables from the .env file
-export $(grep -v '^#' $ENV_FILE2 | xargs)
+export $(grep -v '^#' $ENV_FILE | xargs)
 
 # Substitute variables in the template and generate the docker-compose.yml
 sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
