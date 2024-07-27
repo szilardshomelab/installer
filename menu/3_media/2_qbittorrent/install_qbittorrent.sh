@@ -11,33 +11,44 @@ while true; do
 done
 
 # Prompt the user for the SMB path
-read -p "Enter the SMB path: "SMB_PATH
+read -p "Enter the SMB path: " SMB_PATH
 
 # Update the .env file
 ENV_FILE="/opt/appdata/.env"
+ENV_FILE2="/opt/appdata/.network.env"
 
 # Check if the entry already exists
 if grep -q '^SMB=' "$ENV_FILE"; then
-    sudo sed -i "s/^SMB=.*/SMB=$SMB_PATH/" "$ENV_FILE"
+    sudo sed -i "s|^SMB=.*|SMB=$SMB_PATH|" "$ENV_FILE"
 else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
-ENV_FILE2="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
 mkdir -p /opt/appdata/qbittorrent
 touch /opt/appdata/qbittorrent/compose.yml
 OUTPUT_FILE="/opt/appdata/qbittorrent/compose.yml"
 
-# Load environment variables from the .env file
-export $(grep -v '^#' $ENV_FILE2 | xargs)
+# Load environment variables from the .network.env file
+if [ -f "$ENV_FILE2" ]; then
+    export $(grep -v '^#' $ENV_FILE2 | xargs)
+else
+    echo "Error: Network environment file not found: $ENV_FILE2"
+    exit 1
+fi
+
+# Check if DOCKER_NETWORK_NAME is set
+if [ -z "${DOCKER_NETWORK_NAME}" ]; then
+    echo "Error: DOCKER_NETWORK_NAME is not set in $ENV_FILE2"
+    exit 1
+fi
 
 # Substitute variables in the template and generate the docker-compose.yml
-sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
+sed "s|__DOCKER_NETWORK_NAME__|${DOCKER_NETWORK_NAME}|g" $TEMPLATE_FILE > $OUTPUT_FILE
 
 echo "Starting the qBittorrent service..."
 # Start Docker Compose services
-sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
+sudo docker compose -f $OUTPUT_FILE --env-file $ENV_FILE up -d
 
 # Check if the Docker Compose command was successful
 if [[ $? -ne 0 ]]; then
@@ -76,7 +87,7 @@ echo "Configuration file modified successfully."
 
 # Start the container again
 echo "Restarting the qBittorrent container..."
-sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
+sudo docker compose -f $OUTPUT_FILE --env-file $ENV_FILE up -d
 
 # Check if the Docker Compose command was successful
 if [[ $? -ne 0 ]]; then
@@ -106,7 +117,7 @@ fi
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming qbittorrent is exposed on port 8080
+# Assuming qBittorrent is exposed on port 8080
 QBITTORRENT_PORT=8080
 
 # Construct the access URL
