@@ -48,7 +48,7 @@ network_name=${network_name:-szilardshomelab-proxy}
 sudo docker network create $network_name
 
 # Write Docker network name to the .env file
-echo "DOCKER_NETWORK_NAME=$network_name" | sudo tee -a /opt/szilardshomelab/.env > /dev/null
+echo "DOCKER_NETWORK_NAME=$network_name" | sudo tee -a /opt/szilardshomelab/.network.env > /dev/null
 
 echo "Docker network '$network_name' created successfully."
-echo "Network name saved to /opt/szilardshomelab/.env."
+echo "Network name saved to /opt/szilardshomelab/.network.env."
