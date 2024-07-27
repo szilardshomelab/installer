@@ -7,7 +7,7 @@ function show_menu() {
     echo -n "Please choose an option [1 - 5]: "
 }
 function install_docker() {
-    /opt/szilardshomelab/menu/2_docker/1_install_docker/install_docker.sh
+    /opt/szilardshomelab/menu/2_docker/1_docker_install/install_docker.sh
 }
 function install_portainer() {
     /opt/szilardshomelab/menu/2_docker/2_portainer_install/install_portainer.sh
