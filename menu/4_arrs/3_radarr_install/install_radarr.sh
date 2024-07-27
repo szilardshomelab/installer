@@ -20,21 +20,20 @@ else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
-ENV_FILE="/opt/szilardshomelab/.env"
+ENV_FILE2="/opt/szilardshomelab/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/radarr/compose-template.yml"
 mkdir -p /opt/appdata/radarr
 touch /opt/appdata/radarr/compose.yml
 OUTPUT_FILE="/opt/appdata/radarr/compose.yml"
 
 # Load environment variables from the .env file
-export $(grep -v '^#' $ENV_FILE | xargs)
+export $(grep -v '^#' $ENV_FILE2 | xargs)
 
 # Substitute variables in the template and generate the docker-compose.yml
-envsubst < $TEMPLATE_FILE > $OUTPUT_FILE
+sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
 
-# Run the Docker Compose command with the environment files
-echo "Starting the radarr service..."
-sudo docker compose -f $OUTPUT_FILE up -d
+# Start Docker Compose services
+sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
 
 # Check if the Docker Compose command was successful
 if [[ $? -ne 0 ]]; then
