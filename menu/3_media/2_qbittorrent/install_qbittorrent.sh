@@ -59,7 +59,7 @@ sleep 5
 
 # Stop the container
 echo "Stopping the qBittorrent container..."
-sudo docker compose -f $OUTPUT_FILE down
+sudo docker compose -f $OUTPUT_FILE --env-file $ENV_FILE down -d
 
 # Check if the configuration file exists
 CONFIG_FILE="/opt/appdata/qbittorrent/config/qBittorrent/qBittorrent.conf"
