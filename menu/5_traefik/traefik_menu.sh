@@ -1,5 +1,5 @@
 function show_menu() {
-    echo "1. Prowlarr install"
+    echo "1. Traefik install"
     echo "2. Back"
     echo "3. Exit"
     echo -n "Please choose an option [1 - 3]: "
@@ -14,7 +14,7 @@ while true; do
     read choice
     case $choice in
         1)
-            install_traefi
+            install_traefik
             ;;
         2)
             clear
