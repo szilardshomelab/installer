@@ -13,11 +13,11 @@ services:
     ports:
       - 9443:9443
     networks:
-      - ${DOCKER_NETWORK_NAME}
+      - __DOCKER_NETWORK_NAME__
     restart: unless-stopped
     security_opt:
       - apparmor:unconfined
 
 networks:
-  ${DOCKER_NETWORK_NAME}:
+  __DOCKER_NETWORK_NAME__:
     external: true

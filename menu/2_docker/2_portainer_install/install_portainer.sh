@@ -11,7 +11,7 @@ while true; do
 done
 
 # Define the paths
-ENV_FILE="/opt/szilardshomelab/.env"
+ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/prowlarr/compose-template.yml"
 mkdir -p /opt/appdata/prowlarr
 touch /opt/appdata/prowlarr/compose.yml
@@ -21,7 +21,7 @@ OUTPUT_FILE="/opt/appdata/prowlarr/compose.yml"
 export $(grep -v '^#' $ENV_FILE | xargs)
 
 # Substitute variables in the template and generate the docker-compose.yml
-envsubst < $TEMPLATE_FILE > $OUTPUT_FILE
+sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
 
 # Start Docker Compose services
 sudo docker compose -f $OUTPUT_FILE up -d
