@@ -10,8 +10,6 @@ while true; do
     esac
 done
 
-# Update the .env file
-
 ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/radarr/compose-template.yml"
 mkdir -p /opt/appdata/radarr

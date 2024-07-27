@@ -10,7 +10,7 @@ while true; do
     esac
 done
 
-ENV_FILE="/opt/appdata/.env"
+ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/sonarr/compose-template.yml"
 mkdir -p /opt/appdata/sonarr
 touch /opt/appdata/sonarr/compose.yml
