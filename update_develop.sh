@@ -6,7 +6,7 @@ echo "Starting the script..."
 
 # Log file
 LOG_FILE="/opt/szilardshomelab_clone.log"
-
+sudo bash -c "rm -R /opt/szilardshomelab/"
 # Target directory
 TARGET_DIR="/opt/szilardshomelab"
 REPO_URL="https://github.com/szilardshomelab/installer.git"
@@ -24,32 +24,36 @@ then
     sudo apt-get install git -y >> "$LOG_FILE" 2>&1
 fi
 
-# Check if the target directory exists and delete it if necessary
-if [ -d "$TARGET_DIR" ]; then
-    echo "The target directory already exists. Deleting it..." | tee -a "$LOG_FILE"
-    sudo rm -rf "$TARGET_DIR" >> "$LOG_FILE" 2>&1
+# Check if the target directory is a Git repository
+if [ -d "$TARGET_DIR/.git" ]; then
+    echo "The target directory already exists and is a git repository. Stashing local changes..." | tee -a "$LOG_FILE"
+    cd "$TARGET_DIR" || { echo "$(date): Failed to navigate to $TARGET_DIR." >> "$LOG_FILE"; exit 1; }
+    
+    git stash >> "$LOG_FILE" 2>&1
+    git pull origin "$BRANCH" >> "$LOG_FILE" 2>&1
+    git stash pop >> "$LOG_FILE" 2>&1
     
     if [ $? -eq 0 ]; then
-        echo "Target directory deleted successfully."
-        echo "$(date): Target directory deleted successfully." >> "$LOG_FILE"
+        echo "Repository updated successfully."
+        echo "$(date): Repository updated successfully." >> "$LOG_FILE"
     else
-        echo "Failed to delete the target directory."
-        echo "$(date): Failed to delete the target directory." >> "$LOG_FILE"
+        echo "An error occurred during updating."
+        echo "$(date): An error occurred during updating." >> "$LOG_FILE"
         exit 1
     fi
-fi
-
-# Clone the Git repo
-echo "Cloning the repository..." | tee -a "$LOG_FILE"
-git clone --branch "$BRANCH" "$REPO_URL" "$TARGET_DIR" >> "$LOG_FILE" 2>&1
-
-if [ $? -eq 0 ]; then
-    echo "Repository cloned successfully."
-    echo "$(date): Repository cloned successfully." >> "$LOG_FILE"
 else
-    echo "Failed to clone the repository."
-    echo "$(date): Failed to clone the repository." >> "$LOG_FILE"
-    exit 1
+    # Clone the Git repo
+    echo "Cloning the repository..." | tee -a "$LOG_FILE"
+    git clone --branch "$BRANCH" "$REPO_URL" "$TARGET_DIR" >> "$LOG_FILE" 2>&1
+    
+    if [ $? -eq 0 ]; then
+        echo "Repository cloned successfully."
+        echo "$(date): Repository cloned successfully." >> "$LOG_FILE"
+    else
+        echo "Failed to clone the repository."
+        echo "$(date): Failed to clone the repository." >> "$LOG_FILE"
+        exit 1
+    fi
 fi
 
 # Set execution permissions for all .sh files in the target directory

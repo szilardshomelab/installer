@@ -16,7 +16,7 @@ sudo apt-get update -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 sudo apt-get install docker-compose -y
 sudo usermod -aG docker $USER
-sudo mkdir -p /opt/appdata
+sudo mkdir -p /opt/appdata/
 # Get USER_ID and GROUP_ID as the current user, not as root
 CURRENT_USER=$(logname)
 USER_ID=$(sudo -u $CURRENT_USER id -u)
