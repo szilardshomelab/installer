@@ -28,17 +28,14 @@ GROUP_ID=$(sudo -u $CURRENT_USER id -g)
     echo "GROUP_ID=$GROUP_ID"
 } | sudo tee /opt/szilardshomelab/.env > /dev/null
 
-# Read and validate timezone input
-read -p "Please enter your current timezone (e.g., America/New_York): " TIMEZONE
+# Set timezone using dpkg-reconfigure tzdata
+sudo dpkg-reconfigure tzdata
 
-if timedatectl list-timezones | grep -q "$TIMEZONE"; then
-    sudo timedatectl set-timezone "$TIMEZONE"
-    echo "Timezone successfully set to $(timedatectl | grep 'Time zone' | awk '{print $3}')."
-    echo "TIMEZONE=$TIMEZONE" | sudo tee -a /opt/szilardshomelab/.env > /dev/null
-    echo "Timezone has been written to /opt/szilardshomelab/.env."
-else
-    echo "Invalid timezone. Please check the list of timezones using 'timedatectl list-timezones'."
-fi
+# Get the current timezone and write to .env file
+CURRENT_TIMEZONE=$(cat /etc/timezone)
+echo "TIMEZONE=$CURRENT_TIMEZONE" | sudo tee -a /opt/szilardshomelab/.env > /dev/null
+echo "Timezone successfully set to $CURRENT_TIMEZONE."
+echo "Timezone has been written to /opt/szilardshomelab/.env."
 
 # Prompt user for Docker network name with default option
 read -p "Please create Docker network proxy (default: szilardshomelab-proxy): " network_name
