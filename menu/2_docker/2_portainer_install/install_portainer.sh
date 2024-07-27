@@ -24,7 +24,7 @@ export $(grep -v '^#' $ENV_FILE | xargs)
 sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
 
 # Start Docker Compose services
-sudo docker compose -f $OUTPUT_FILE --env-file /opt/szilardshomelab/.env up -d
+sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
 
 echo "Docker Compose services started!"
 
