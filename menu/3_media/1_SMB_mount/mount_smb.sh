@@ -70,7 +70,7 @@ if mountpoint -q "$MOUNT_POINT"; then
     # Write MOUNT_POINT to /opt/appdata/.env
     ENV_FILE="/opt/appdata/.env"
     log_message "Writing SMB mount point to $ENV_FILE."
-    echo "SMB=$MOUNT_POINT" | sudo tee "$ENV_FILE" >> /dev/null
+    echo "SMB=$MOUNT_POINT" | sudo tee "$ENV_FILE" > /dev/null
 else
     log_message "Failed to mount $SHARE to $MOUNT_POINT. Attempting manual mount for debugging."
 
