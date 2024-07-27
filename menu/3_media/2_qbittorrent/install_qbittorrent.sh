@@ -11,18 +11,19 @@ while true; do
 done
 
 # Prompt the user for the SMB path
-read -p "Enter the SMB path: " SMB_PATH
+read -p "Enter the SMB path: "SMB_PATH
 
 # Update the .env file
 ENV_FILE="/opt/appdata/.env"
 
 # Check if the entry already exists
 if grep -q '^SMB=' "$ENV_FILE"; then
-    sudo sed -i "s|^SMB=.*|SMB=$SMB_PATH|" "$ENV_FILE"
+    sudo sed -i "s/^SMB=.*/SMB=$SMB_PATH/" "$ENV_FILE"
 else
     echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
 fi
 
+ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
 mkdir -p /opt/appdata/qbittorrent
 touch /opt/appdata/qbittorrent/compose.yml
@@ -32,7 +33,7 @@ OUTPUT_FILE="/opt/appdata/qbittorrent/compose.yml"
 export $(grep -v '^#' $ENV_FILE | xargs)
 
 # Substitute variables in the template and generate the docker-compose.yml
-sed "s|__DOCKER_NETWORK_NAME__|${DOCKER_NETWORK_NAME}|g" $TEMPLATE_FILE > $OUTPUT_FILE
+sed "s/__DOCKER_NETWORK_NAME__/${DOCKER_NETWORK_NAME}/g" $TEMPLATE_FILE > $OUTPUT_FILE
 
 echo "Starting the qBittorrent service..."
 # Start Docker Compose services
@@ -87,7 +88,6 @@ echo "qBittorrent service restarted successfully with updated configuration."
 
 # Wait for the container to be fully started (increase the sleep duration if needed)
 sleep 5
-
 # Get the container ID or name
 CONTAINER_ID=$(sudo docker ps -q -f "name=qbittorrent") # Adjust filter if necessary
 
@@ -95,7 +95,6 @@ if [ -z "$CONTAINER_ID" ]; then
   echo "Error: Unable to find the qBittorrent container."
   exit 1
 fi
-
 # Retrieve logs from the container and extract the temporary password
 TEMP_PASSWORD=$(sudo docker logs "$CONTAINER_ID" 2>&1 | grep -oP '(?<=The WebUI administrator password was not set. A temporary password is provided for this session: )[^\s]*')
 
@@ -107,7 +106,7 @@ fi
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming qBittorrent is exposed on port 8080
+# Assuming qbittorrent is exposed on port 8080
 QBITTORRENT_PORT=8080
 
 # Construct the access URL
