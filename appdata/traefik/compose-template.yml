@@ -9,7 +9,7 @@ services:
       - __DOCKER_NETWORK_NAME__
     ports:
       - 80:80
-      - 12443:443
+      - 443:443
     environment:
       - CF_API_EMAIL=${TRAEFIK_EMAIL}
       - CF_DNS_API_TOKEN=${CLOUDFLARE_TOKEN}

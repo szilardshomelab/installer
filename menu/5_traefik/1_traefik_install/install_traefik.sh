@@ -16,6 +16,7 @@ BASE_DIR="/opt/appdata/traefik"
 # Create the necessary directories
 mkdir -p ${BASE_DIR}/logs
 
+touch ${BASE_DIR}/config.yml
 # Create the acme.json file with the required permissions
 touch ${BASE_DIR}/acme.json
 chmod 600 ${BASE_DIR}/acme.json
@@ -86,6 +87,7 @@ EOL
 # Notify the user that the files have been created and the .env file has been updated
 echo "Files and directories have been created successfully:"
 echo "${BASE_DIR}/acme.json (permissions: 600)"
+echo "${BASE_DIR}/config.yml"
 echo "${BASE_DIR}/traefik.yml"
 echo "${BASE_DIR}/logs"
 echo ".env file has been updated with your email address, Cloudflare token, and domain name."
