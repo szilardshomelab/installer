@@ -94,7 +94,7 @@ echo ".env file has been updated with your email address, Cloudflare token, and 
 
 ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/traefik/compose-template.yml"
-touch /opt/appdata/sonarr/compose.yml
+touch /opt/appdata/traefik/compose.yml
 OUTPUT_FILE="/opt/appdata/traefik/compose.yml"
 
 # Load environment variables from the .env file

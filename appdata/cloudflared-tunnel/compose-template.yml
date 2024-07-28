@@ -1,0 +1,19 @@
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    restart: unless-stopped
+    command: tunnel --config /home/nonroot/.cloudflared/config.yml run $TUNNEL_ID
+    volumes:
+      - /opt/appdata/cloudflared:/home/nonroot/.cloudflared
+    security_opt:
+      - apparmor:unconfined
+    networks:
+      - __DOCKER_NETWORK_NAME__
+    env_file:
+      - /opt/appdata/.env
+
+networks:
+  __DOCKER_NETWORK_NAME__:
+    name: proxy
+    external: true

@@ -6,7 +6,8 @@ function show_menu() {
     echo "3. Media (SMB mount, qBittorrent)"
     echo "4. ARRs"
     echo "5. Traefik"
-    echo "6. Exit"
+    echo "6. Cloudflare"
+    echo "7. Exit"
     echo -n "Please choose an option [1 - 4]: "
 }
 
@@ -50,7 +51,14 @@ function traefik() {
         exit 0
     fi
 }
-
+function cloudflare() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/6_cloudflare-tunnel/cloudflare-menu.sh
+    
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
 while true; do
     show_menu
     read choice
@@ -69,8 +77,11 @@ while true; do
             ;;
         5)
             traefik
-            ;;                 
+            ;;   
         6)
+            cloudflare
+            ;;                  
+        7)
             echo "Exiting..."
             exit 0
             ;;
