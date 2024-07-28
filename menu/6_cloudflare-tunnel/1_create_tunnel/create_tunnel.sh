@@ -27,7 +27,9 @@ chmod -R 777 $CONFIG_DIR
 docker run -v $CONFIG_DIR:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel login
 
 # Create the tunnel
-TUNNEL_ID=$(docker run -v $CONFIG_DIR:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create $TUNNEL_NAME | grep 'Tunnel credentials written to' | awk '{print $NF}' | xargs basename | sed 's/\.json//')
+docker run -v $CONFIG_DIR:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create $TUNNEL_NAME
+
+TUNNEL_ID=$(basename *.json .json)
 
 # Function to update or append environment variables
 update_or_append_env_var() {
