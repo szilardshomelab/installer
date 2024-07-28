@@ -29,7 +29,7 @@ docker run -v $CONFIG_DIR:/home/nonroot/.cloudflared cloudflare/cloudflared:late
 # Create the tunnel
 docker run -v $CONFIG_DIR:/home/nonroot/.cloudflared cloudflare/cloudflared:latest tunnel create $TUNNEL_NAME
 
-TUNNEL_ID=$(basename *.json .json)
+#TUNNEL_ID=$(basename *.json .json) 
 
 # Function to update or append environment variables
 update_or_append_env_var() {
