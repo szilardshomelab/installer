@@ -6,7 +6,7 @@ while true; do
     case "$CONFIRM" in
         [yY]* ) 
             # Prompt for PiHole password and append it to the .env file
-            read -sp "Please enter a stong password for the Pihole WEBUI: " PIHOLE_PASSWORD
+            read -sp "Please enter a strong password for the PiHole WEBUI: " PIHOLE_PASSWORD
             echo
             echo "PIHOLE_PASSWORD=$PIHOLE_PASSWORD" >> /opt/appdata/.env
             break;;  # If 'y' or 'Y' is input, proceed
@@ -18,12 +18,19 @@ while true; do
     esac
 done
 
-# Update the .env file
+# Adjust DNS resolution settings
+sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf
+sudo sh -c 'rm /etc/resolv.conf && ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf'
+sudo systemctl restart systemd-resolved
+
+# Define file paths
 NETWORK_ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/pihole/compose-template.yml"
-mkdir -p /opt/appdata/pihole
-touch /opt/appdata/pihole/compose.yml
 OUTPUT_FILE="/opt/appdata/pihole/compose.yml"
+
+# Create necessary directories and files
+mkdir -p /opt/appdata/pihole
+touch $OUTPUT_FILE
 
 # Load environment variables from the .network.env file
 if [ -f "$NETWORK_ENV_FILE" ]; then
@@ -56,7 +63,7 @@ echo "PiHole service started successfully"
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming Portainer is exposed on port 500
+# Assuming PiHole is exposed on port 500
 pihole_PORT=500
 
 # Construct the access URL
