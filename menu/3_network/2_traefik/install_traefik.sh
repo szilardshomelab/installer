@@ -118,11 +118,11 @@ echo "Traefik service started successfully"
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
 # Assuming Portainer is exposed on port 8989
-traefik_PORT=8989
+traefik_PORT=8090
 
 # Construct the access URL
 ACCESS_URL="http://$SERVER_IP:$traefik_PORT"
 
 echo "Access Traefik Dashboard at: $ACCESS_URL"
 echo "Default username : admin"
-echo "Default password : password4TRAEFIK"
+echo "Default password : password"
