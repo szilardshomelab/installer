@@ -28,13 +28,13 @@ function docker() {
     fi
 }
 
-# function media() {
-#     echo "Executing Downloaders setup..."
-#     /opt/szilardshomelab/menu/3_media/media_menu.sh
-#     if [ $? -eq 1 ]; then
-#         exit 0
-#     fi
-# }
+function network() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/3_network/network_menu.sh
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
 
 # function arrs() {
 #     echo "Executing Downloaders setup..."
@@ -70,9 +70,9 @@ while true; do
         2)
             docker
             ;;
-        # 3)
-        #     media
-        #     ;;
+        3)
+            network
+            ;;
         # 4)
         #     arrs
         #     ;;
