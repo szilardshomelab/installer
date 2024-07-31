@@ -1,9 +1,10 @@
 function show_menu() {
-    echo "1. Pihole"
-    echo "2. Traefik"
-    echo "3. Cloudflare Tunnel"
-    echo "4. Back"
-    echo "5. Exit"
+    echo "1. Pihole Install"
+    echo "2. Create Pihole Local DNS Records"
+    echo "3. Traefik"
+    echo "4. Cloudflare Tunnel"
+    echo "5. Back"
+    echo "6. Exit"
     echo -n "Please choose an option [1 - 5]: "
 }
 function install_pihole() {
