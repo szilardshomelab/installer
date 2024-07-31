@@ -65,6 +65,51 @@ else
     exit 1
 fi
 
+# Set ownership and permissions for the directories
+directories=(
+    "/opt/appdata"
+    "/opt/szilardshomelab"
+    "/opt/logs"
+)
+
+# Change ownership to ubuntu
+for dir in "${directories[@]}"; do
+    if [ -d "$dir" ]; then
+        sudo chown -R ubuntu:ubuntu "$dir"
+        echo "Changed ownership of $dir to ubuntu:ubuntu" | tee -a "$LOG_FILE"
+    else
+        echo "$dir does not exist." | tee -a "$LOG_FILE"
+    fi
+done
+
+# Set full permissions (read, write, execute for owner, group, and others)
+for dir in "${directories[@]}"; do
+    if [ -d "$dir" ]; then
+        sudo chmod -R 777 "$dir"
+        echo "Set full permissions for $dir" | tee -a "$LOG_FILE"
+    else
+        echo "$dir does not exist." | tee -a "$LOG_FILE"
+    fi
+done
+
+# Ensure /opt/appdata/traefik directory exists
+TRAFFIC_DIR="/opt/appdata/traefik"
+if [ -d "$TRAFFIC_DIR" ]; then
+    # Set permissions for acme.json file if it exists
+    ACME_FILE="$TRAFFIC_DIR/acme.json"
+    if [ -f "$ACME_FILE" ]; then
+        sudo chmod 600 "$ACME_FILE"
+        echo "Set permissions for $ACME_FILE to 600" | tee -a "$LOG_FILE"
+    else
+        echo "$ACME_FILE does not exist." | tee -a "$LOG_FILE"
+    fi
+else
+    echo "$TRAFFIC_DIR does not exist." | tee -a "$LOG_FILE"
+fi
+
+# End logging
+echo "$(date): Script finished." >> "$LOG_FILE"
+
 # Clear the screen and execute the menu script
 clear
 "$TARGET_DIR/menu/menu.sh"
@@ -74,6 +119,3 @@ if [ $? -ne 0 ]; then
     echo "$(date): menu.sh execution failed." >> "$LOG_FILE"
     exit 1
 fi
-
-# End logging
-echo "$(date): Script finished." >> "$LOG_FILE"
