@@ -8,6 +8,9 @@ log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | sudo tee -a $LOG_FILE > /dev/null
 }
 
+# Create log directory if it doesn't exist
+sudo mkdir -p /opt/logs
+
 # Update package list and install required packages
 log "Updating package list..."
 sudo apt-get update -y | sudo tee -a $LOG_FILE
@@ -22,7 +25,7 @@ sudo chmod a+r /etc/apt/keyrings/docker.asc
 
 # Add Docker repository to Apt sources
 log "Adding Docker repository to Apt sources..."
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 # Install Docker packages
@@ -31,11 +34,6 @@ sudo apt-get update -y | sudo tee -a $LOG_FILE
 log "Installing Docker packages..."
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin | sudo tee -a $LOG_FILE
 sudo apt-get install -y docker-compose | sudo tee -a $LOG_FILE
-
-# Add current user to the docker group
-log "Adding current user to the docker group..."
-sudo usermod -aG docker $USER
-log "Please log out and log back in to apply the user group changes."
 
 # Create /opt/appdata/ directory
 log "Creating /opt/appdata/ directory..."
@@ -46,6 +44,15 @@ log "Getting USER_ID and GROUP_ID for the current user..."
 CURRENT_USER=$(logname)
 USER_ID=$(sudo -u $CURRENT_USER id -u)
 GROUP_ID=$(sudo -u $CURRENT_USER id -g)
+
+# Add the current user to the docker group
+log "Adding current user '$CURRENT_USER' to the docker group..."
+if sudo usermod -aG docker $CURRENT_USER; then
+    log "User '$CURRENT_USER' added to the docker group successfully."
+else
+    log "Failed to add user '$CURRENT_USER' to the docker group."
+    exit 1
+fi
 
 # Write USER_ID and GROUP_ID to the .env file
 log "Writing USER_ID and GROUP_ID to the .env file..."
@@ -78,4 +85,15 @@ if sudo docker network create $network_name; then
 else
     log "Failed to create Docker network '$network_name'."
     exit 1
+fi 
+
+# Prompt user to restart the system
+read -p "Do you want to restart the system now? (yes/no): " restart_choice
+restart_choice=${restart_choice:-no}
+
+if [[ "$restart_choice" == "yes" || "$restart_choice" == "y" ]]; then
+    log "Restarting the system as requested..."
+    sudo reboot
+else
+    log "System restart skipped by user."
 fi
