@@ -87,6 +87,9 @@ response=$(curl -s -G \
   --data-urlencode "auth=$PIHOLE_API_KEY" \
   "$PIHOLE_URL")
 
+# Log the raw response for debugging
+log_message "Raw response: $response"
+
 # Check the response
 if echo "$response" | grep -q '"success":true'; then
   log_message "Local DNS record for $DOMAIN -> $SERVER_IP created successfully."
