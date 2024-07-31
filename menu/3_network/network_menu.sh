@@ -10,8 +10,8 @@ function show_menu() {
 function install_pihole() {
     /opt/szilardshomelab/menu/3_network/1_pihole/install_pihole.sh
 }
-function install_traefik() {
-    /opt/szilardshomelab/menu/2_docker/2_portainer_install/install_portainer.sh
+function create_local_dns() {
+    /opt/szilardshomelab/menu/3_network/2_pihole_local_dns/create_local_dns.sh
 }
 function install_cloudflare_tunnel() {
     /opt/szilardshomelab/menu/2_docker/3_portainer_uninstall/uninstall_portainer.sh
@@ -25,7 +25,7 @@ while true; do
             install_pihole
             ;;
         2)
-            install_traefik
+            create_local_dns
             ;;
         3)
             install_cloudflare_tunnel
