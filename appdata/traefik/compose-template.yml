@@ -41,5 +41,4 @@ services:
 
 networks:
   __DOCKER_NETWORK_NAME__:
-    name: proxy
     external: true
