@@ -50,9 +50,13 @@ fi
 
 # Create and populate the traefik.yml file
 cat <<EOL > ${BASE_DIR}/traefik.yml
+core:
+  defaultRuleSyntax: v3
 api:
   dashboard: true
   debug: true
+log:
+  level: DEBUG
 entryPoints:
   http:
     address: ":80"
@@ -113,16 +117,8 @@ if [[ $? -ne 0 ]]; then
 fi
 
 echo "Traefik service started successfully"
+HTTPS_ACCESS_URL="https://traefik-dashboard-local.${DOMAIN_NAME}"
 
-#Get the server's IP address
-SERVER_IP=$(hostname -I | awk '{print $1}')
-
-# Assuming Portainer is exposed on port 8989
-traefik_PORT=8090
-
-# Construct the access URL
-ACCESS_URL="http://$SERVER_IP:$traefik_PORT"
-
-echo "Access Traefik Dashboard at: $ACCESS_URL"
+echo "Access Traefik Dashboard at: $HTTPS_ACCESS_URL"
 echo "Default username : admin"
 echo "Default password : password"
