@@ -46,6 +46,7 @@ else
   echo "$(date): An error occurred during cloning or pulling." >> "$LOG_FILE"
 fi
 clear
+
 /opt/szilardshomelab/menu/menu.sh
 # End logging
 echo "$(date): Script finished." >> "$LOG_FILE"

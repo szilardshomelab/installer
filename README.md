@@ -10,3 +10,8 @@ sudo wget -qO ./update_main https://raw.githubusercontent.com/szilardshomelab/in
 sudo chmod +x update_main &&\
 sudo ./update_main
 
+Update Develop
+
+sudo wget -qO ./update_develop https://raw.githubusercontent.com/szilardshomelab/installer/develop/update_develop.sh &&\
+sudo chmod +x update_develop &&\
+sudo ./update_develop

@@ -2,12 +2,13 @@
 
 function show_menu() {
     echo "1. Basic Function (Apt-Update/Upgrade, Reboot, Shutdown)"
-    echo "2. Docker"
-    echo "3. Media (SMB mount, qBittorrent)"
-    echo "4. ARRs"
-    echo "5. Traefik"
-    echo "6. Cloudflare"
-    echo "7. Exit"
+    echo "2. Docker (Docker, Portainer)"
+    echo "3. Network (PiHole DNS, Traefik Reverse Proxy, Cloudflare-Tunnel)"
+    echo "4. Media (SMB mount, qBittorrent)"
+    echo "5. ARRs"
+    echo "6. Traefik"
+    echo "7. Cloudflare"
+    echo "8. Exit"
     echo -n "Please choose an option [1 - 4]: "
 }
 
@@ -27,38 +28,38 @@ function docker() {
     fi
 }
 
-function media() {
-    echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/3_media/media_menu.sh
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-}
+# function media() {
+#     echo "Executing Downloaders setup..."
+#     /opt/szilardshomelab/menu/3_media/media_menu.sh
+#     if [ $? -eq 1 ]; then
+#         exit 0
+#     fi
+# }
 
-function arrs() {
-    echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/4_arrs/arrs_menu.sh
+# function arrs() {
+#     echo "Executing Downloaders setup..."
+#     /opt/szilardshomelab/menu/4_arrs/arrs_menu.sh
     
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-}
-function traefik() {
-    echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/5_traefik/traefik_menu.sh
+#     if [ $? -eq 1 ]; then
+#         exit 0
+#     fi
+# }
+# function traefik() {
+#     echo "Executing Downloaders setup..."
+#     /opt/szilardshomelab/menu/5_traefik/traefik_menu.sh
     
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-}
-function cloudflare() {
-    echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/6_cloudflare-tunnel/cloudflare-menu.sh
+#     if [ $? -eq 1 ]; then
+#         exit 0
+#     fi
+# }
+# function cloudflare() {
+#     echo "Executing Downloaders setup..."
+#     /opt/szilardshomelab/menu/6_cloudflare-tunnel/cloudflare-menu.sh
     
-    if [ $? -eq 1 ]; then
-        exit 0
-    fi
-}
+#     if [ $? -eq 1 ]; then
+#         exit 0
+#     fi
+# }
 while true; do
     show_menu
     read choice
@@ -69,19 +70,19 @@ while true; do
         2)
             docker
             ;;
-        3)
-            media
-            ;;
-        4)
-            arrs
-            ;;
-        5)
-            traefik
-            ;;   
-        6)
-            cloudflare
-            ;;                  
-        7)
+        # 3)
+        #     media
+        #     ;;
+        # 4)
+        #     arrs
+        #     ;;
+        # 5)
+        #     traefik
+        #     ;;   
+        # 6)
+        #     cloudflare
+        #     ;;                  
+        8)
             echo "Exiting..."
             exit 0
             ;;

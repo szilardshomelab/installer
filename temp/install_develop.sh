@@ -5,7 +5,10 @@ echo "Welcome to SZILARDSHOMELAB!"
 echo "Starting the script..."
 
 # Log file
-LOG_FILE="/opt/szilardshomelab_clone.log"
+LOG_FILE="/opt/logs/clone_repo.log"
+
+# Ensure the logs directory exists
+mkdir -p /opt/logs
 
 # Target directory
 TARGET_DIR="/opt/szilardshomelab"
