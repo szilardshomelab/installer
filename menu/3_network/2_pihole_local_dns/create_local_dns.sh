@@ -1,6 +1,36 @@
 #!/bin/bash
 
-# Part 1: Extract API key from Pi-hole Docker container and write to .api.env
+# Define log file path
+LOG_FILE="/opt/logs/create_dns_record.log"
+
+# Create the log file directory if it doesn't exist
+mkdir -p "$(dirname "$LOG_FILE")"
+
+# Function to log messages with timestamps
+log_message() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+# Part 1: Prompt for confirmation and domain name
+
+# Ask for confirmation
+read -p "Are you sure you want to create a local DNS record in Pi-hole? (yes/no): " confirmation
+
+if [ "$confirmation" != "yes" ]; then
+  log_message "Operation cancelled."
+  exit 0
+fi
+
+# Ask for the domain name
+read -p "Enter the domain name (e.g., SOMETHING.local): " DOMAIN
+
+# Validate domain name
+if [[ ! "$DOMAIN" =~ ^[a-zA-Z0-9.-]+\.local$ ]]; then
+  log_message "Error: Invalid domain name. It should end with '.local'."
+  exit 1
+fi
+
+# Part 2: Extract API key from Pi-hole Docker container and write to .api.env
 
 # Define variables for extracting API key
 CONTAINER_NAME="pihole"
@@ -15,7 +45,7 @@ WEBPASSWORD=$(sudo docker exec "$CONTAINER_NAME" awk -F'=' '/^WEBPASSWORD/ {prin
 
 # Check if WEBPASSWORD was found and not empty
 if [ -z "$WEBPASSWORD" ]; then
-  echo "Error: WEBPASSWORD not found in $CONTAINER_PATH"
+  log_message "Error: WEBPASSWORD not found in $CONTAINER_PATH"
   exit 1
 fi
 
@@ -23,37 +53,30 @@ fi
 echo "PIHOLE_API_KEY=$WEBPASSWORD" > "$ENV_FILE_PATH"
 
 # Provide feedback
-echo "API key written to $ENV_FILE_PATH"
+log_message "API key written to $ENV_FILE_PATH"
 
-# Part 2: Use the API key to create a local DNS record
+# Part 3: Use the API key to create a local DNS record
 
 # Load the API key from the environment file
 source "$ENV_FILE_PATH"
 
 # Check if the API key was loaded
 if [ -z "$PIHOLE_API_KEY" ]; then
-  echo "Error: PIHOLE_API_KEY not found in $ENV_FILE_PATH"
+  log_message "Error: PIHOLE_API_KEY not found in $ENV_FILE_PATH"
   exit 1
 fi
+
+# Fetch the server IP address dynamically
 SERVER_IP=$(hostname -I | awk '{print $1}')
-# Define the Pi-hole URL
-PIHOLE_URL="http://$SERVER_IP/admin/api.php"
-
-# Check if DOMAIN argument is provided
-if [ -z "$1" ]; then
-  echo "Error: No domain provided. Usage: $0 SOMETHING.local"
-  exit 1
-fi
-
-DOMAIN="$1"
-
-
 
 # Check if SERVER_IP was obtained
 if [ -z "$SERVER_IP" ]; then
-  echo "Error: Could not determine server IP address."
+  log_message "Error: Could not determine server IP address."
   exit 1
 fi
+
+# Define the Pi-hole URL
+PIHOLE_URL="http://$SERVER_IP/admin/api.php"
 
 # Create the local DNS record using the Pi-hole API
 response=$(curl -s -G \
@@ -66,8 +89,8 @@ response=$(curl -s -G \
 
 # Check the response
 if echo "$response" | grep -q '"success":true'; then
-  echo "Local DNS record for $DOMAIN -> $SERVER_IP created successfully."
+  log_message "Local DNS record for $DOMAIN -> $SERVER_IP created successfully."
 else
-  echo "Error: Failed to create local DNS record. Response: $response"
+  log_message "Error: Failed to create local DNS record. Response: $response"
   exit 1
 fi
