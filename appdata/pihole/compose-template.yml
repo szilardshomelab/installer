@@ -30,8 +30,8 @@ services:
       PIHOLE_DNS_: '172.10.10.2#5053'
       DNSMASQ_LISTENING: 'all'
     volumes:
-      - '/opt/appdata/pihole/:/etc/pihole/'
-      - '/opt/appdata/pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+      - '/opt/appdata/pihole/config:/etc/pihole/'
+      - '/opt/appdata/pihole/config/etc-dnsmasq.d/:/etc/dnsmasq.d/'
     restart: unless-stopped
     depends_on:
       - cloudflared
