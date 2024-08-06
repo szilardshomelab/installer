@@ -36,22 +36,22 @@ function network() {
     fi
 }
 
-# function arrs() {
-#     echo "Executing Downloaders setup..."
-#     /opt/szilardshomelab/menu/4_arrs/arrs_menu.sh
+function media() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/4_media/media_menu.sh
     
-#     if [ $? -eq 1 ]; then
-#         exit 0
-#     fi
-# }
-# function traefik() {
-#     echo "Executing Downloaders setup..."
-#     /opt/szilardshomelab/menu/5_traefik/traefik_menu.sh
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
+function arrs() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/5_arrs/arrs_menu.sh
     
-#     if [ $? -eq 1 ]; then
-#         exit 0
-#     fi
-# }
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
 # function cloudflare() {
 #     echo "Executing Downloaders setup..."
 #     /opt/szilardshomelab/menu/6_cloudflare-tunnel/cloudflare-menu.sh
@@ -73,12 +73,12 @@ while true; do
         3)
             network
             ;;
-        # 4)
-        #     arrs
-        #     ;;
-        # 5)
-        #     traefik
-        #     ;;   
+        4)
+            media
+            ;;
+        5)
+            arrs
+            ;;   
         # 6)
         #     cloudflare
         #     ;;                  

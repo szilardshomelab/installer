@@ -10,11 +10,11 @@ function show_menu() {
 function install_pihole() {
     /opt/szilardshomelab/menu/3_network/1_pihole/install_pihole.sh
 }
-function create_local_dns() {
-    /opt/szilardshomelab/menu/3_network/2_pihole_local_dns/create_local_dns.sh
-}
 function install_traefik() {
-    /opt/szilardshomelab/menu/3_network/3_traefik/install_traefik.sh
+    /opt/szilardshomelab/menu/3_network/2_traefik/install_traefik.sh
+}
+function install_cloudflare_tunnel() {
+    /opt/szilardshomelab/menu/3_network/3_cloudflare-tunnel/create_tunnel.sh
 }
 
 while true; do
@@ -25,10 +25,10 @@ while true; do
             install_pihole
             ;;
         2)
-            create_local_dns
+            install_traefik
             ;;
         3)
-            install_traefik
+            install_cloudflare_tunnel
             ;;
         4)
             clear
