@@ -2,10 +2,13 @@
 
 function show_menu() {
     echo "1. Basic Function (Apt-Update/Upgrade, Reboot, Shutdown)"
-    echo "2. Docker"
-    echo "3. Media (SMB mount, qBittorrent)"
-    echo "4. ARRs"
-    echo "5. Exit"
+    echo "2. Docker (Docker, Portainer)"
+    echo "3. Network (PiHole DNS, Traefik Reverse Proxy, Cloudflare-Tunnel)"
+    echo "4. Media (SMB mount, qBittorrent)"
+    echo "5. ARRs"
+    echo "6. Traefik"
+    echo "7. Cloudflare"
+    echo "8. Exit"
     echo -n "Please choose an option [1 - 4]: "
 }
 
@@ -25,23 +28,38 @@ function docker() {
     fi
 }
 
-function media() {
+function network() {
     echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/3_media/media_menu.sh
+    /opt/szilardshomelab/menu/3_network/network_menu.sh
     if [ $? -eq 1 ]; then
         exit 0
     fi
 }
 
-function arrs() {
+function media() {
     echo "Executing Downloaders setup..."
-    /opt/szilardshomelab/menu/4_arrs/arrs_menu.sh
+    /opt/szilardshomelab/menu/4_media/media_menu.sh
     
     if [ $? -eq 1 ]; then
         exit 0
     fi
 }
-
+function arrs() {
+    echo "Executing Downloaders setup..."
+    /opt/szilardshomelab/menu/5_arrs/arrs_menu.sh
+    
+    if [ $? -eq 1 ]; then
+        exit 0
+    fi
+}
+# function cloudflare() {
+#     echo "Executing Downloaders setup..."
+#     /opt/szilardshomelab/menu/6_cloudflare-tunnel/cloudflare-menu.sh
+    
+#     if [ $? -eq 1 ]; then
+#         exit 0
+#     fi
+# }
 while true; do
     show_menu
     read choice
@@ -53,12 +71,18 @@ while true; do
             docker
             ;;
         3)
-            media
+            network
             ;;
         4)
-            arrs
-            ;;            
+            media
+            ;;
         5)
+            arrs
+            ;;   
+        # 6)
+        #     cloudflare
+        #     ;;                  
+        8)
             echo "Exiting..."
             exit 0
             ;;

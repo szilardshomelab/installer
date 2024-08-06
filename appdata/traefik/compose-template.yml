@@ -1,0 +1,44 @@
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - __DOCKER_NETWORK_NAME__
+    ports:
+      - 80:80
+      - 443:443
+      - 8090:8080
+    environment:
+      - CF_API_EMAIL=${TRAEFIK_EMAIL}
+      - CF_DNS_API_TOKEN=${CLOUDFLARE_TOKEN}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/appdata/traefik/traefik.yml:/traefik.yml:ro
+      - /opt/appdata/traefik/acme.json:/acme.json
+      - /opt/appdata/traefik/config.yml:/config.yml:ro
+      - /opt/appdata/traefik/logs:/var/log/traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-dashboard-local.${DOMAIN_NAME}`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=admin:{SHA}W6ph5Mm5Pz8GgiULbPgzG37mj9g="
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-dashboard-local.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=${DOMAIN_NAME}"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${DOMAIN_NAME}"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+
+networks:
+  __DOCKER_NETWORK_NAME__:
+    external: true

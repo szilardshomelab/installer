@@ -7,13 +7,13 @@ function show_menu() {
     echo -n "Please choose an option [1 - 3]: "
 }
 function smb_mount() {
-    /opt/szilardshomelab/menu/3_media/1_SMB_mount/mount_smb.sh
+    /opt/szilardshomelab/menu/4_media/1_SMB_mount/mount_smb.sh
 }
 function install_qbittorrent() {
-    /opt/szilardshomelab/menu/3_media/2_qbittorrent/install_qbittorrent.sh
+    /opt/szilardshomelab/menu/4_media/2_qbittorrent/install_qbittorrent.sh
 }
 function uninstall_qbittorrent() {
-    /opt/szilardshomelab/menu/3_media/3_qbittorrent_uninstall/uninstall_qbittorrent.sh
+    /opt/szilardshomelab/menu/4_media/3_qbittorrent_uninstall/uninstall_qbittorrent.sh
 }
 
 while true; do

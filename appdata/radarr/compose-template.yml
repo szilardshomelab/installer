@@ -12,10 +12,22 @@ services:
     ports:
       - 7878:7878
     networks:
-      - ${DOCKER_NETWORK_NAME}
+      - __DOCKER_NETWORK_NAME__
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.entrypoints=http"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.${DOMAIN_NAME}`)"
+      - "traefik.http.middlewares.radarr-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.radarr.middlewares=radarr-https-redirect"
+      - "traefik.http.routers.radarr-secure.entrypoints=https"
+      - "traefik.http.routers.radarr-secure.rule=Host(`radarr.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.radarr-secure.tls=true"
+      - "traefik.http.routers.radarr-secure.service=radarr"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+      - "traefik.docker.network=__DOCKER_NETWORK_NAME__"
     restart: unless-stopped
 
 networks:
-  ${DOCKER_NETWORK_NAME}:
+  __DOCKER_NETWORK_NAME__:
     driver: bridge
     external: true

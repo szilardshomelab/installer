@@ -10,34 +10,33 @@ while true; do
     esac
 done
 
-# Prompt the user for the SMB path
-read -p "Enter the SMB path: " SMB_PATH
-
 # Update the .env file
-ENV_FILE="/opt/szilardshomelab/.env"
-
-# Check if the entry already exists
-if grep -q '^SMB=' "$ENV_FILE"; then
-    sudo sed -i "s/^SMB=.*/SMB=$SMB_PATH/" "$ENV_FILE"
-else
-    echo "SMB=$SMB_PATH" | sudo tee -a "$ENV_FILE" > /dev/null
-fi
-
-ENV_FILE="/opt/szilardshomelab/.env"
+ENV_FILE="/opt/appdata/.network.env"
 TEMPLATE_FILE="/opt/szilardshomelab/appdata/qbittorrent/compose-template.yml"
 mkdir -p /opt/appdata/qbittorrent
 touch /opt/appdata/qbittorrent/compose.yml
 OUTPUT_FILE="/opt/appdata/qbittorrent/compose.yml"
 
-# Load environment variables from the .env file
-export $(grep -v '^#' $ENV_FILE | xargs)
+# Load environment variables from the .network.env file
+if [ -f "$ENV_FILE" ]; then
+    export $(grep -v '^#' $ENV_FILE | xargs)
+else
+    echo "Error: Network environment file not found: $ENV_FILE"
+    exit 1
+fi
+
+# Check if DOCKER_NETWORK_NAME is set
+if [ -z "${DOCKER_NETWORK_NAME}" ]; then
+    echo "Error: DOCKER_NETWORK_NAME is not set in $ENV_FILE"
+    exit 1
+fi
 
 # Substitute variables in the template and generate the docker-compose.yml
-envsubst < $TEMPLATE_FILE > $OUTPUT_FILE
+sed "s|__DOCKER_NETWORK_NAME__|${DOCKER_NETWORK_NAME}|g" $TEMPLATE_FILE > $OUTPUT_FILE
 
-# Run the Docker Compose command with the environment files
 echo "Starting the qBittorrent service..."
-sudo docker compose -f $OUTPUT_FILE up -d
+# Start Docker Compose services
+sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
 
 # Check if the Docker Compose command was successful
 if [[ $? -ne 0 ]]; then
@@ -52,7 +51,7 @@ sleep 5
 
 # Stop the container
 echo "Stopping the qBittorrent container..."
-sudo docker compose -f $OUTPUT_FILE down
+sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env down
 
 # Check if the configuration file exists
 CONFIG_FILE="/opt/appdata/qbittorrent/config/qBittorrent/qBittorrent.conf"
@@ -76,7 +75,7 @@ echo "Configuration file modified successfully."
 
 # Start the container again
 echo "Restarting the qBittorrent container..."
-sudo docker compose -f $OUTPUT_FILE up -d
+sudo docker compose -f $OUTPUT_FILE --env-file /opt/appdata/.env up -d
 
 # Check if the Docker Compose command was successful
 if [[ $? -ne 0 ]]; then
@@ -88,6 +87,7 @@ echo "qBittorrent service restarted successfully with updated configuration."
 
 # Wait for the container to be fully started (increase the sleep duration if needed)
 sleep 5
+
 # Get the container ID or name
 CONTAINER_ID=$(sudo docker ps -q -f "name=qbittorrent") # Adjust filter if necessary
 
@@ -95,6 +95,7 @@ if [ -z "$CONTAINER_ID" ]; then
   echo "Error: Unable to find the qBittorrent container."
   exit 1
 fi
+
 # Retrieve logs from the container and extract the temporary password
 TEMP_PASSWORD=$(sudo docker logs "$CONTAINER_ID" 2>&1 | grep -oP '(?<=The WebUI administrator password was not set. A temporary password is provided for this session: )[^\s]*')
 
@@ -106,7 +107,7 @@ fi
 # Get the server's IP address
 SERVER_IP=$(hostname -I | awk '{print $1}')
 
-# Assuming qbittorrent is exposed on port 8080
+# Assuming qBittorrent is exposed on port 8080
 QBITTORRENT_PORT=8080
 
 # Construct the access URL

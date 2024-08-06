@@ -26,7 +26,7 @@ fi
 
 # Target directory
 REPO_URL="https://github.com/szilardshomelab/installer.git"
-BRANCH="main"
+BRANCH="develop"
 
 # Start logging
 echo "$(date): Script started." >> "$LOG_FILE"

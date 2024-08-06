@@ -1,0 +1,59 @@
+services:
+  cloudflared:
+    container_name: cloudflared
+    restart: unless-stopped
+    image: cloudflare/cloudflared:latest
+    command: proxy-dns
+    environment:
+      - "TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query,https://9.9.9.9/dns-query,https://149.112.112.9/dns-query"
+      - "TUNNEL_DNS_PORT=5053"
+      - "TUNNEL_DNS_ADDRESS=0.0.0.0"
+    networks:
+      pihole_internal:
+        ipv4_address: 172.10.10.2
+    security_opt:
+      - no-new-privileges:true
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "500:80/tcp"
+    networks:
+      pihole_internal:
+        ipv4_address: 172.10.10.3
+      __DOCKER_NETWORK_NAME__:
+    environment:
+      TZ: ${TIMEZONE}
+      WEBPASSWORD: ${PIHOLE_PASSWORD}
+      PIHOLE_DNS_: '172.10.10.2#5053'
+      DNSMASQ_LISTENING: 'all'
+      VIRTUAL_HOST: pihole-local.${DOMAIN_NAME}
+    volumes:
+      - '/opt/appdata/pihole/config:/etc/pihole/'
+      - '/opt/appdata/pihole/config/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    restart: unless-stopped
+    depends_on:
+      - cloudflared
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pihole.entrypoints=http"
+      - "traefik.http.routers.pihole.rule=Host(`pihole-local.${DOMAIN_NAME}`) && PathPrefix(`/admin`)"
+      - "traefik.http.middlewares.pihole-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.pihole.middlewares=pihole-https-redirect"
+      - "traefik.http.routers.pihole-secure.entrypoints=https"
+      - "traefik.http.routers.pihole-secure.rule=Host(`pihole-local.${DOMAIN_NAME}`) && PathPrefix(`/admin`)"
+      - "traefik.http.routers.pihole-secure.tls=true"
+      - "traefik.http.routers.pihole-secure.service=pihole"
+      - "traefik.http.services.pihole.loadbalancer.server.port=80"
+      - "traefik.docker.network=__DOCKER_NETWORK_NAME__"
+
+networks:
+  pihole_internal:
+     ipam:
+       config:
+         - subnet: 172.10.10.0/29
+     name: pihole_internal
+  __DOCKER_NETWORK_NAME__:
+    external: true
