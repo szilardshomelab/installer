@@ -36,10 +36,10 @@ while true; do
             update_system
             ;;
         2)
-            reboot_system
+            qemu-guest-agent
             ;;
         3)
-            qemu-guest-agent
+            reboot_system
             ;;
         4)
             poweroff_system
