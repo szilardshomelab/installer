@@ -1,5 +1,5 @@
 function show_menu() {
-    echo "1. Install Docker + Docker Composet"
+    echo "1. Install Docker + Docker Compose"
     echo "2. Install Portainer"
     echo "3. Uninstall Portainer"
     echo "4. Back"

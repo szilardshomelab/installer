@@ -1,5 +1,5 @@
 function show_menu() {
-    echo "1. Pihole Install"
+    echo "1. Pihole with Cloudflared (DNS over HTTPS)"
     echo "2. Create Pihole Local DNS Records"
     echo "3. Traefik"
     echo "4. Cloudflare Tunnel"
