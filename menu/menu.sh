@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function show_menu() {
-    echo "1. Basic Function (Apt-Update/Upgrade, Reboot, Shutdown)"
+    echo "1. Basic Functions (Apt-Update/Upgrade,Qemu-Guest-Agent, Reboot, Shutdown)"
     echo "2. Docker (Docker, Portainer)"
     echo "3. Network (PiHole DNS, Traefik Reverse Proxy, Cloudflare-Tunnel)"
     echo "4. Media (SMB mount, qBittorrent)"
